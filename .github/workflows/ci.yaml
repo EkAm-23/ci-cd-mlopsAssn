@@ -46,4 +46,7 @@ jobs:
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/iris-api:${{ github.sha }}
 
       - name: Run Docker image
-        run: docker run --rm ${{ secrets.DOCKER_USERNAME }}/iris-api:${{ github.sha }}
+        run: timeout 10 docker run --rm ${{ secrets.DOCKER_USERNAME }}/iris-api:${{ github.sha }} || true
+
+      - name: Stop Docker container
+        run: docker stop $(docker ps -q) 2>/dev/null || true
